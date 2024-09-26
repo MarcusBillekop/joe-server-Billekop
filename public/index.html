@@ -17,16 +17,31 @@
     <li style="float:right"><a href="/locations">Locations</a></li>
     <li style="float:right"><a href="/">Menu</a></li>
   </ul>
+  
   <div class="center">
     <button onclick="getResponse()">Press me</button>
     <p id="response"></p>
   </div>
+
   <div class="center">
     <button onclick="setCookie()">Set cookie</button>
     <p id="cookie"></p>
   </div>
 
+  <!-- Knap til Astrid-siden -->
+  <div class="center">
+    <button onclick="goToAstridPage()">Tryk hvis du er Astrid</button>
+  </div>
+
+  <script src="./static/scripts/index.js"></script>
+
+  <script>
+    // Funktion til at navigere til /astrid siden
+    function goToAstridPage() {
+      window.location.href = "/astrid";
+    }
+  </script>
+
 </body>
-<script src="./static/scripts/index.js"></script>
 
 </html>

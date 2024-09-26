@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Til Astrid</title>
+  <style>
+    body {
+      background-color: #f8f0e3;
+      font-family: 'Arial', sans-serif;
+      text-align: center;
+      padding: 20px;
+    }
+
+    h1 {
+      color: #ff6f61;
+      font-size: 3em;
+      margin-top: 50px;
+    }
+
+    p {
+      font-size: 1.5em;
+      color: #333;
+      margin: 20px;
+      line-height: 1.6;
+    }
+
+    .heart {
+      font-size: 5em;
+      color: #ff6f61;
+      animation: pulse 1s infinite;
+    }
+
+    .container {
+      display: none; /* Skjuler indholdet indtil koden er indtastet */
+      max-width: 600px;
+      margin: 0 auto;
+      background-color: #fff;
+      border-radius: 15px;
+      box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+      padding: 40px;
+    }
+
+    button {
+      background-color: #ff6f61;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 20px;
+      cursor: pointer;
+      font-size: 1.2em;
+      margin-top: 20px;
+    }
+
+    button:hover {
+      background-color: #ff3b2f;
+    }
+
+    #passwordPrompt {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    #passwordPrompt input {
+      padding: 10px;
+      font-size: 1em;
+      margin-bottom: 10px;
+    }
+
+    #passwordPrompt button {
+      background-color: #ff6f61;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 20px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Password input prompt -->
+  <div id="passwordPrompt">
+    <h2>Indtast brugernavn og adgangskode for at se siden</h2>
+    <input type="text" id="username" placeholder="Brugernavn">
+    <input type="password" id="password" placeholder="Adgangskode">
+    <button onclick="checkPassword()">Submit</button>
+  </div>
+
+  <!-- Indhold skjult indtil korrekt kode indtastes -->
+  <div class="container" id="content">
+    <h1>Til Min Elskede Astrid</h1>
+    <div class="heart">❤️</div>
+    <p>Kære Astrid,</p>
+    <p>Jeg vil bare minde dig om, hvor meget jeg elsker dig. Du er min verden, mit lys og min største glæde. Jeg er så taknemmelig for, at vi deler vores liv sammen.</p>
+    <p>Hver dag med dig er en gave, og jeg ser frem til alle de smukke minder, vi vil skabe sammen.</p>
+    <p>Elsker dig for evigt og altid ❤️</p>
+
+    <button onclick="showMessage()">Klik for en sød besked</button>
+
+    <p id="secretMessage" style="display:none;">Du gør mit hjerte fuldendt 💖</p>
+  </div>
+
+  <script>
+    // Simpel adgangskodekontrol
+    function checkPassword() {
+      const username = document.getElementById('username').value;
+      const password = document.getElementById('password').value;
+
+      const correctUsername = "Astrid"; // Erstat med det ønskede brugernavn
+      const correctPassword = "JegElskerDig"; // Erstat med din ønskede adgangskode
+
+      if (username === correctUsername && password === correctPassword) {
+        document.getElementById('passwordPrompt').style.display = 'none';
+        document.getElementById('content').style.display = 'block';
+      } else {
+        alert("Forkert brugernavn eller adgangskode, prøv igen.");
+      }
+    }
+
+    function showMessage() {
+      document.getElementById('secretMessage').style.display = 'block';
+    }
+  </script>
+
+</body>
+
+</html>
