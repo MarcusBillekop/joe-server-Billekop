@@ -70,22 +70,42 @@ async function getLocation() {
 }
 
 
-// ----------------------------------------------------------------------------------------------------
-// Opgave 2: Lav en asynkron funktion med locationName som parameter til at hente latitude og longitude 
-// url for API: `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(locationName)}&format=json&addressdetails=1`
-// dokumentation for API: https://nominatim.org/release-docs/develop/api/Search/
-// response er json() data og skal konverteres og brug console.log() til at se data
-// denne funktion bliver kaldt i getLocation() funktionen
-
-// async funktion med await
+// Asynkron funktion til at hente latitude og longitude
 async function getLatLong(locationName) {
- 
-  
+  const url = `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(locationName)}&format=json&addressdetails=1`;
 
+  try {
+      const response = await fetch(url);
+      if (!response.ok) {
+          throw new Error("Fejl under hentning af data");
+      }
 
+      const data = await response.json();
+      console.log(data);
 
+      if (data.length === 0) {
+          throw new Error("Ingen resultater fundet");
+      }
+
+      const latitude = data[0].lat;
+      const longitude = data[0].lon;
+
+      const locationDom = document.getElementById("location");
+      const latlongDom = document.getElementById("latlong");
+
+      locationDom.innerHTML = `Location: ${locationName}`;
+      latlongDom.innerHTML = `Latitude: ${latitude}, Longitude: ${longitude}`;
+
+      // Kald getWeather med de hentede latitude og longitude
+      await getWeather(latitude, longitude);
+
+  } catch (error) {
+      console.error("Fejl:", error.message);
+      const latlongDom = document.getElementById("latlong");
+      latlongDom.innerHTML = `Fejl: ${error.message}`;
+  }
 }
-// ----------------------------------------------------------------------------------------------------
+
 
 
 // ----------------------------------------------------------------------------------------------------
@@ -96,11 +116,46 @@ async function getLatLong(locationName) {
 // denne funktion bliver kaldt i getLatLong() funktionen
 
 // async funktion med await
+// Opgave 3: Lav en asynkron funktion med latitude og longitude som parametre til at hente vejrdata
 async function getWeather(lat, long) {
+  // Definer API-endpoint med de givne latitude og longitude
+  const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${long}&current_weather=true`;
 
+  try {
+      // Fetch vejrdata fra API
+      const response = await fetch(url);
 
+      // Tjek om svaret er gyldigt
+      if (!response.ok) {
+          throw new Error("Fejl under hentning af vejrdata");
+      }
 
+      // Konverter responsen til JSON
+      const data = await response.json();
 
+      // Log data til konsollen for at se struktur
+      console.log(data);
 
+      // Tjek om der er vejrdata
+      if (data && data.current_weather) {
+          // Hent relevant vejrdata
+          const temperature = data.current_weather.temperature;
+          const windspeed = data.current_weather.windspeed;
+
+          // Tilføj vejrdata til DOM
+          const weatherDom = document.getElementById("weather");
+          weatherDom.innerHTML = `Temperatur: ${temperature}°C, Vindhastighed: ${windspeed} km/h`;
+      } else {
+          throw new Error("Ingen vejrdata fundet");
+      }
+  } catch (error) {
+      // Håndter fejl og log til konsollen
+      console.error("Fejl:", error.message);
+
+      // Tilføj fejlbesked til DOM
+      const weatherDom = document.getElementById("weather");
+      weatherDom.innerHTML = `Fejl: ${error.message}`;
+  }
 }
+
 // ----------------------------------------------------------------------------------------------------
