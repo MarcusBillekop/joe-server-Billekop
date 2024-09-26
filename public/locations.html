@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="./styles/global.css">
-  <title>JOE and The Juice</title>
+  <title>JOE and The Juice - Weather Locations</title>
 </head>
 
 <body>
@@ -17,8 +17,9 @@
     <li style="float:right"><a href="/locations">Locations</a></li>
     <li style="float:right"><a href="/">Menu</a></li>
   </ul>
-  
+
   <div class="center">
+    <h2>Check the Weather</h2>
     <select id="locationDropdown">
       <option value="copenhagen">Copenhagen</option>
       <option value="los_angeles">Los Angeles</option>
@@ -28,14 +29,15 @@
     </select>
 
     <button onclick="getLocation()">Submit</button>
-
-    <br />
-
-    <p id="location"></p>
-    <p id="latlong"></p>
-    <p id="weather"></p>
   </div>
-  
+
+  <div class="weather-card">
+    <h3 id="location">Select a location</h3>
+    <div class="weather-icon">☀️</div> <!-- This can be updated with weather condition -->
+    <p id="latlong" class="weather-data"></p>
+    <p id="weather" class="weather-data"></p>
+  </div>
+
   <script src="./scripts/index.js"></script>
 </body>
 
