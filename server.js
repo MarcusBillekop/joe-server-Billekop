@@ -5,7 +5,10 @@ const cookieParser = require('cookie-parser');
 const app = express();
 
 app.use(cors());
-app.use("/static", express.static("public"));
+
+// Serverer alt i "public" mappen som statiske filer
+app.use(express.static("public"));
+
 app.use((req, res, next) => {
     console.log("----- HTTP Request -----");
     console.log(`Method: ${req.method}`); // HTTP Method
@@ -21,22 +24,15 @@ app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "index.html"));
 });
 
-// ----------------------------------------------------------------------------------------------------
-// OPGAVE 1: Lav et endpoint /location for at sende locations.html filen
+// Endpoint til locations.html filen
 app.get("/locations", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "locations.html"));
 });
 
-// ----------------------------------------------------------------------------------------------------
 // Adgangskodebeskyttelse for /astrid ruten med Basic Authentication
-
-
-
-
 app.use('/astrid', (req, res, next) => {
   const auth = { login: 'user', password: 'dinhemmeligeadgangskode' }; // Erstat med login og adgangskode
 
-  // Basic Auth check
   const b64auth = (req.headers.authorization || '').split(' ')[1] || '';
   const [login, password] = Buffer.from(b64auth, 'base64').toString().split(':');
 
@@ -45,14 +41,13 @@ app.use('/astrid', (req, res, next) => {
   }
 
   res.set('WWW-Authenticate', 'Basic realm="401"'); // Prompt til login
-  res.status(401).send('Adgang nægtet'); // Adgang nægtet
+  res.status(401).send('Adgang nægtet');
 });
 
-
+// Endpoint for at servere HTML-filen til Astrid
 app.get("/astrid", (req, res) => {
-  res.sendFile(path.join(__dirname, "public", "astrid.html")); // Sørg for, at astrid.html ligger i public-mappen
+  res.sendFile(path.join(__dirname, "public", "astrid.html"));
 });
-// ----------------------------------------------------------------------------------------------------
 
 app.get("/res", (req, res) => {
   res.send("Response message from server");
