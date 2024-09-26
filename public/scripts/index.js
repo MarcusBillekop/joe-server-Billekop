@@ -142,6 +142,8 @@ async function getWeather(lat, long) {
   // Definer API-endpoint med de givne latitude og longitude
   const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${long}&current_weather=true`;
 
+  console.log(`Fetching weather for Latitude: ${lat}, Longitude: ${long}`); // For at sikre lat/long er korrekt
+
   try {
       // Fetch vejrdata fra API
       const response = await fetch(url);
@@ -178,5 +180,7 @@ async function getWeather(lat, long) {
       weatherDom.innerHTML = `Fejl: ${error.message}`;
   }
 }
+
+
 
 // ----------------------------------------------------------------------------------------------------
