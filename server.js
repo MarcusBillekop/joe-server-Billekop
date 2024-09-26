@@ -31,10 +31,6 @@ app.get("/locations", (req, res) => {
 
 // ----------------------------------------------------------------------------------------------------
 // Adgangskodebeskyttelse for /astrid ruten med Basic Authentication
-
-
-
-
 app.use('/astrid', (req, res, next) => {
   const auth = { login: 'user', password: 'dinhemmeligeadgangskode' }; // Erstat med login og adgangskode
 
@@ -50,10 +46,6 @@ app.use('/astrid', (req, res, next) => {
   res.status(401).send('Adgang nægtet'); // Adgang nægtet
 });
 
-
-app.get("/astrid", (req, res) => {
-  res.sendFile(path.join(__dirname, "public", "astrid.html")); // Sørg for, at astrid.html ligger i public-mappen
-});
 // ----------------------------------------------------------------------------------------------------
 
 app.get("/res", (req, res) => {
