@@ -70,6 +70,18 @@ async function getLocation() {
 }
 
 
+// Funktion til at hente den valgte placering og kalde getLatLong()
+async function getLocation() {
+  const dropdown = document.getElementById('locationDropdown');
+  const selectedLocation = dropdown.options[dropdown.selectedIndex].value;
+
+  // Opdater DOM med den valgte placering
+  document.getElementById('location').innerHTML = `Your location is ${selectedLocation}`;
+
+  // Kald getLatLong med den valgte placering for at få latitude og longitude
+  await getLatLong(selectedLocation);
+}
+
 // Asynkron funktion til at hente latitude og longitude
 async function getLatLong(locationName) {
   // Definer API-endpoint
@@ -99,45 +111,22 @@ async function getLatLong(locationName) {
       const latitude = data[0].lat;
       const longitude = data[0].lon;
 
-      // Tilføj data til DOM-elementer
-      const locationDom = document.getElementById("location");
-      const latlongDom = document.getElementById("latlong");
+      // Opdater DOM med lat/long
+      document.getElementById("latlong").innerHTML = `Latitude: ${latitude}, Longitude: ${longitude}`;
 
-      // Opdater DOM med data
-      locationDom.innerHTML = `Location: ${locationName}`;
-      latlongDom.innerHTML = `Latitude: ${latitude}, Longitude: ${longitude}`;
+      // Kald getWeather med de hentede latitude og longitude
+      await getWeather(latitude, longitude);
 
   } catch (error) {
       // Håndter fejl og log til konsollen
       console.error("Fejl:", error.message);
 
       // Tilføj fejlbesked til DOM
-      const latlongDom = document.getElementById("latlong");
-      latlongDom.innerHTML = `Fejl: ${error.message}`;
+      document.getElementById("latlong").innerHTML = `Fejl: ${error.message}`;
   }
 }
 
-// Funktion der bliver kaldt ved knaptryk for at få valgt placering
-function getLocation() {
-  // Hent den valgte placering fra dropdown
-  const locationDropdown = document.getElementById("locationDropdown");
-  const locationName = locationDropdown.value;
-
-  // Kald funktionen til at hente latitude og longitude
-  getLatLong(locationName);
-}
-
-
-
-// ----------------------------------------------------------------------------------------------------
-// Opgave 3: Lav en asynkron funktion med latitude og longitude som parametre til at hente vejrdata
-// url for API: `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${long}&current_weather=true`
-// dokumentation for API: https://open-meteo.com/en/docs
-// response er json() data og skal konverteres og brug console.log() til at se data
-// denne funktion bliver kaldt i getLatLong() funktionen
-
-// async funktion med await
-// Opgave 3: Lav en asynkron funktion med latitude og longitude som parametre til at hente vejrdata
+// Funktion til at hente vejrdata baseret på latitude og longitude
 async function getWeather(lat, long) {
   // Definer API-endpoint med de givne latitude og longitude
   const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${long}&current_weather=true`;
@@ -166,8 +155,7 @@ async function getWeather(lat, long) {
           const windspeed = data.current_weather.windspeed;
 
           // Tilføj vejrdata til DOM
-          const weatherDom = document.getElementById("weather");
-          weatherDom.innerHTML = `Temperatur: ${temperature}°C, Vindhastighed: ${windspeed} km/h`;
+          document.getElementById("weather").innerHTML = `Temperatur: ${temperature}°C, Vindhastighed: ${windspeed} km/h`;
       } else {
           throw new Error("Ingen vejrdata fundet");
       }
@@ -176,8 +164,7 @@ async function getWeather(lat, long) {
       console.error("Fejl:", error.message);
 
       // Tilføj fejlbesked til DOM
-      const weatherDom = document.getElementById("weather");
-      weatherDom.innerHTML = `Fejl: ${error.message}`;
+      document.getElementById("weather").innerHTML = `Fejl: ${error.message}`;
   }
 }
 
