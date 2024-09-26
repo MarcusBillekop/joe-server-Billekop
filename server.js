@@ -34,16 +34,23 @@ app.get("/locations", (req, res) => {
 app.use('/astrid', (req, res, next) => {
   const auth = { login: 'user', password: 'dinhemmeligeadgangskode' }; // Erstat med login og adgangskode
 
-  // Basic Auth check
+  // Hent autorisationsdata fra anmodningen (Basic Auth)
   const b64auth = (req.headers.authorization || '').split(' ')[1] || '';
   const [login, password] = Buffer.from(b64auth, 'base64').toString().split(':');
 
+  // Tjek login og adgangskode
   if (login && password && login === auth.login && password === auth.password) {
     return next(); // Adgang givet, fortsæt til ruten
   }
 
+  // Hvis login ikke matcher, returner "Access Denied"
   res.set('WWW-Authenticate', 'Basic realm="401"'); // Prompt til login
   res.status(401).send('Adgang nægtet'); // Adgang nægtet
+});
+
+// Endpoint for at servere HTML-filen til Astrid
+app.get("/astrid", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "astrid.html")); // Sørg for, at astrid.html ligger i public-mappen
 });
 
 // ----------------------------------------------------------------------------------------------------
