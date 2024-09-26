@@ -29,10 +29,32 @@ app.get("/locations", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "locations.html"));
 });
 
-// Endpoint for at servere HTML-filen til Astrid uden adgangskodebeskyttelse
-app.get("/astrid", (req, res) => {
-  res.sendFile(path.join(__dirname, "public", "astrid.html"));
+// ----------------------------------------------------------------------------------------------------
+// Adgangskodebeskyttelse for /astrid ruten med Basic Authentication
+
+
+
+
+app.use('/astrid', (req, res, next) => {
+  const auth = { login: 'user', password: 'dinhemmeligeadgangskode' }; // Erstat med login og adgangskode
+
+  // Basic Auth check
+  const b64auth = (req.headers.authorization || '').split(' ')[1] || '';
+  const [login, password] = Buffer.from(b64auth, 'base64').toString().split(':');
+
+  if (login && password && login === auth.login && password === auth.password) {
+    return next(); // Adgang givet, fortsæt til ruten
+  }
+
+  res.set('WWW-Authenticate', 'Basic realm="401"'); // Prompt til login
+  res.status(401).send('Adgang nægtet'); // Adgang nægtet
 });
+
+
+app.get("/astrid", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "astrid.html")); // Sørg for, at astrid.html ligger i public-mappen
+});
+// ----------------------------------------------------------------------------------------------------
 
 app.get("/res", (req, res) => {
   res.send("Response message from server");

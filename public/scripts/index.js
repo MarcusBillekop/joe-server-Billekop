@@ -72,38 +72,59 @@ async function getLocation() {
 
 // Asynkron funktion til at hente latitude og longitude
 async function getLatLong(locationName) {
+  // Definer API-endpoint
   const url = `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(locationName)}&format=json&addressdetails=1`;
 
   try {
+      // Fetch data fra API
       const response = await fetch(url);
+
+      // Tjek om svaret er gyldigt
       if (!response.ok) {
           throw new Error("Fejl under hentning af data");
       }
 
+      // Konverter responsen til JSON
       const data = await response.json();
+
+      // Log data til konsollen for at se struktur
       console.log(data);
 
+      // Tjek om vi har modtaget resultater
       if (data.length === 0) {
           throw new Error("Ingen resultater fundet");
       }
 
+      // Hent latitude og longitude fra det første resultat
       const latitude = data[0].lat;
       const longitude = data[0].lon;
 
+      // Tilføj data til DOM-elementer
       const locationDom = document.getElementById("location");
       const latlongDom = document.getElementById("latlong");
 
+      // Opdater DOM med data
       locationDom.innerHTML = `Location: ${locationName}`;
       latlongDom.innerHTML = `Latitude: ${latitude}, Longitude: ${longitude}`;
 
-      // Kald getWeather med de hentede latitude og longitude
-      await getWeather(latitude, longitude);
-
   } catch (error) {
+      // Håndter fejl og log til konsollen
       console.error("Fejl:", error.message);
+
+      // Tilføj fejlbesked til DOM
       const latlongDom = document.getElementById("latlong");
       latlongDom.innerHTML = `Fejl: ${error.message}`;
   }
+}
+
+// Funktion der bliver kaldt ved knaptryk for at få valgt placering
+function getLocation() {
+  // Hent den valgte placering fra dropdown
+  const locationDropdown = document.getElementById("locationDropdown");
+  const locationName = locationDropdown.value;
+
+  // Kald funktionen til at hente latitude og longitude
+  getLatLong(locationName);
 }
 
 
